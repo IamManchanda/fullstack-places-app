@@ -1,10 +1,29 @@
-import React, { Fragment } from "react";
-import "./app.scss";
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Switch,
+} from "react-router-dom";
+import PagesIndex from "./pages/index.js";
+import PagesPlacesNew from "./pages/places/new.js";
+import PagesError from "./pages/error.js";
 
 const App = () => (
-  <Fragment>
-    <h1 class="welcome-title">Welcome to our Page</h1>
-  </Fragment>
+  <Router>
+    <Switch>
+      <Route path="/" exact>
+        <PagesIndex />
+      </Route>
+      <Route path="/places/new" exact>
+        <PagesPlacesNew />
+      </Route>
+      <Route path="/error" exact>
+        <PagesError />
+      </Route>
+      <Redirect to="/error" />
+    </Switch>
+  </Router>
 );
 
 export default App;
