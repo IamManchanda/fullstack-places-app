@@ -6,7 +6,7 @@ const C_Navigation_NavLinks = props => (
   <ul className="nav-links">
     <li>
       <NavLink to="/" exact>
-        All users
+        All Users
       </NavLink>
     </li>
     <li>
