@@ -3,7 +3,7 @@ import React from "react";
 import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
 
-const C_Navigation_SideDrawer = ({ show, handleClick, children }) => {
+const Navigation_SideDrawer = ({ show, handleClick, children }) => {
   const content = (
     <CSSTransition
       in={show}
@@ -20,4 +20,4 @@ const C_Navigation_SideDrawer = ({ show, handleClick, children }) => {
   return createPortal(content, document.getElementById("side-drawer-root"));
 };
 
-export default C_Navigation_SideDrawer;
+export default Navigation_SideDrawer;

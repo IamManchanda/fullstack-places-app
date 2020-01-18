@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-pascal-case */
 import React, { useState } from "react";
-import C_UsersList from "../components/users-list";
+import UsersList from "../components/users-list";
 import uuidv4 from "uuid/v4";
 
 const P_Index = () => {
@@ -74,7 +74,7 @@ const P_Index = () => {
     },
   ]);
 
-  return <C_UsersList users={users} />;
+  return <UsersList users={users} />;
 };
 
 export default P_Index;

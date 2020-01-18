@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-pascal-case */
 import React, { useState, Fragment } from "react";
 import { Link } from "react-router-dom";
-import C_Navigation_MainHeader from "../main-header";
-import C_Navigation_SideDrawer from "../side-drawer";
-import C_Navigation_NavLinks from "../nav-links";
-import C_Shared_Backdrop from "../../shared/backdrop";
+import Navigation_MainHeader from "../main-header";
+import Navigation_SideDrawer from "../side-drawer";
+import Navigation_NavLinks from "../nav-links";
+import Shared_Backdrop from "../../shared/backdrop";
 
-const C_Navigation_MainNavigation = props => {
+const Navigation_MainNavigation = props => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
 
   const handleOpenDrawer = () => {
@@ -19,16 +19,16 @@ const C_Navigation_MainNavigation = props => {
 
   return (
     <Fragment>
-      {drawerIsOpen && <C_Shared_Backdrop handleClick={handleCloseDrawer} />}
-      <C_Navigation_SideDrawer
+      {drawerIsOpen && <Shared_Backdrop handleClick={handleCloseDrawer} />}
+      <Navigation_SideDrawer
         show={drawerIsOpen}
         handleClick={handleCloseDrawer}
       >
         <nav className="main-navigation__drawer-nav">
-          <C_Navigation_NavLinks />
+          <Navigation_NavLinks />
         </nav>
-      </C_Navigation_SideDrawer>
-      <C_Navigation_MainHeader>
+      </Navigation_SideDrawer>
+      <Navigation_MainHeader>
         <button
           className="main-navigation__menu-btn"
           onClick={handleOpenDrawer}
@@ -41,11 +41,11 @@ const C_Navigation_MainNavigation = props => {
           <Link to="/">Places App</Link>
         </h1>
         <nav className="main-navigation__header-nav">
-          <C_Navigation_NavLinks />
+          <Navigation_NavLinks />
         </nav>
-      </C_Navigation_MainHeader>
+      </Navigation_MainHeader>
     </Fragment>
   );
 };
 
-export default C_Navigation_MainNavigation;
+export default Navigation_MainNavigation;

@@ -2,7 +2,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const C_Navigation_NavLinks = props => (
+const Navigation_NavLinks = props => (
   <ul className="nav-links">
     <li>
       <NavLink to="/" exact>
@@ -21,4 +21,4 @@ const C_Navigation_NavLinks = props => (
   </ul>
 );
 
-export default C_Navigation_NavLinks;
+export default Navigation_NavLinks;
