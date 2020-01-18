@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import PlacesList from "../../../components/places-list";
 
 const P_Users_UserId_Places = () => {
@@ -6,7 +7,7 @@ const P_Users_UserId_Places = () => {
     {
       id: "p1",
       image:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/500px-Empire_State_Building_%28aerial_view%29.jpg",
+        "https://untappedcities.com/wp-content/uploads/2015/07/Flatiron-Building-Secrets-Roof-Basement-Elevator-Sonny-Atis-GFP-NYC_5.jpg",
       title: "Empire State Building",
       description: "One of the most famous sky scrapers in the world.",
       address: "20 W 34th St, New York, NY 10001, United States",
@@ -17,9 +18,9 @@ const P_Users_UserId_Places = () => {
       },
     },
     {
-      id: "p1",
+      id: "p2",
       image:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/500px-Empire_State_Building_%28aerial_view%29.jpg",
+        "https://untappedcities.com/wp-content/uploads/2015/07/Flatiron-Building-Secrets-Roof-Basement-Elevator-Sonny-Atis-GFP-NYC_5.jpg",
       title: "Empire State Building",
       description: "One of the most famous sky scrapers in the world.",
       address: "20 W 34th St, New York, NY 10001, United States",
@@ -31,7 +32,9 @@ const P_Users_UserId_Places = () => {
     },
   ]);
 
-  return <PlacesList places={places} />;
+  const { userId } = useParams();
+  const placesByUserFilter = places.filter(place => place.creator === userId);
+  return <PlacesList places={placesByUserFilter} />;
 };
 
 export default P_Users_UserId_Places;
