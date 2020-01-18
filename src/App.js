@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-pascal-case */
 import React from "react";
 import {
   BrowserRouter as Router,
@@ -5,21 +6,22 @@ import {
   Redirect,
   Switch,
 } from "react-router-dom";
-import PagesIndex from "./pages/index.js";
-import PagesPlacesNew from "./pages/places/new.js";
-import PagesError from "./pages/error.js";
+import P_Index from "./pages/index.js";
+import P_Places_New from "./pages/places/new.js";
+import P_Error from "./pages/error.js";
+import "./assets/styles.css";
 
 const App = () => (
   <Router>
     <Switch>
       <Route path="/" exact>
-        <PagesIndex />
+        <P_Index />
       </Route>
       <Route path="/places/new" exact>
-        <PagesPlacesNew />
+        <P_Places_New />
       </Route>
       <Route path="/error" exact>
-        <PagesError />
+        <P_Error />
       </Route>
       <Redirect to="/error" />
     </Switch>

@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
 
-const PagesError = () => (
+const P_Error = () => (
   <Fragment>
     <h1>404! The Page doesn't exist</h1>
   </Fragment>
 );
 
-export default PagesError;
+export default P_Error;

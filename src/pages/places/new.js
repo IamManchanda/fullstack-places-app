@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
 
-const PagesPlacesNew = () => (
+const P_Places_New = () => (
   <Fragment>
     <h1>New Place Page</h1>
   </Fragment>
 );
 
-export default PagesPlacesNew;
+export default P_Places_New;
