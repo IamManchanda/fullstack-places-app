@@ -1,14 +1,14 @@
 /* eslint-disable react/jsx-pascal-case */
 import React from "react";
-import UsersList_UserItem from "./user-item";
 import Shared_Card from "../shared/card";
+import UsersList_UserItem from "./user-item";
 
 const UsersList = ({ users }) => {
   if (!users || users.length === 0) {
     return (
-      <div className="center">
+      <div className="users-list center h-full">
         <Shared_Card>
-          <h2>No users found</h2>
+          <h2>No Users found.</h2>
         </Shared_Card>
       </div>
     );

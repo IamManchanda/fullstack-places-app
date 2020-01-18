@@ -7,7 +7,7 @@ import Shared_Avatar from "../../shared/avatar";
 const UsersList_UserItem = ({ id, name, image, places }) => (
   <li className="user-item">
     <Shared_Card className="user-item__content">
-      <Link to={`/places/${id}`}>
+      <Link to={`/users/${id}/places`}>
         <div className="user-item__image">
           <Shared_Avatar name={name} image={image} />
         </div>
