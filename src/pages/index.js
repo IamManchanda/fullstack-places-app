@@ -55,7 +55,7 @@ const P_Index = () => {
     },
     {
       id: uuidv4(),
-      name: "Mohammed Shami",
+      name: "Md. Shami",
       image: "http://p.imgci.com/db/PICTURES/CMS/263700/263708.1.jpg",
       places: 9,
     },
