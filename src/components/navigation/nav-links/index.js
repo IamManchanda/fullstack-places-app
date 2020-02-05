@@ -10,7 +10,7 @@ const Navigation_NavLinks = props => (
       </NavLink>
     </li>
     <li>
-      <NavLink to="users/u1/places">My Places</NavLink>
+      <NavLink to="/users/u1/places">My Places</NavLink>
     </li>
     <li>
       <NavLink to="/places/new">Add New Place</NavLink>

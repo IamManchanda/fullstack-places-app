@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-pascal-case */
 import React, { Fragment, useState } from "react";
 import Shared_Card from "../../shared/card";
+import Shared_Button from "../../shared/button";
 import Shared_Modal from "../../shared/modal";
 
 const PlacesList_PlaceItem = ({
@@ -21,7 +22,9 @@ const PlacesList_PlaceItem = ({
         show={showMap}
         handleCancel={handleCloseMap}
         header={address}
-        footer={<button onClick={handleCloseMap}>Close</button>}
+        footer={
+          <Shared_Button handleClick={handleCloseMap}>Close</Shared_Button>
+        }
         contentClass="place-item__modal-content"
         footerClass="place-item__modal-actions"
       >
@@ -40,9 +43,11 @@ const PlacesList_PlaceItem = ({
             <p>{description}</p>
           </div>
           <div className="place-item__actions">
-            <button onClick={handleOpenMap}>View on Map</button>
-            <button>Edit</button>
-            <button>Delete</button>
+            <Shared_Button handleClick={handleOpenMap} inverse>
+              View on Map
+            </Shared_Button>
+            <Shared_Button to={`/places/${id}`}>Edit</Shared_Button>
+            <Shared_Button danger>Delete</Shared_Button>
           </div>
         </Shared_Card>
       </li>
