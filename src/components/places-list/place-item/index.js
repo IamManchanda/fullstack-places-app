@@ -3,6 +3,7 @@ import React, { Fragment, useState } from "react";
 import Shared_Card from "../../shared/card";
 import Shared_Button from "../../shared/button";
 import Shared_Modal from "../../shared/modal";
+import Shared_Map from "../../shared/map";
 
 const PlacesList_PlaceItem = ({
   id,
@@ -29,7 +30,7 @@ const PlacesList_PlaceItem = ({
         footerClass="place-item__modal-actions"
       >
         <div className="map-container">
-          <h2>The Map</h2>
+          <Shared_Map center={location} zoom={16} />
         </div>
       </Shared_Modal>
       <li className="place-item">

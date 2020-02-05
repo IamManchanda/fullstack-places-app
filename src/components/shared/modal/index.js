@@ -28,6 +28,7 @@ const Shared_Modal = ({
         footer={footer}
         handleSubmit={handleSubmit}
         contentClass={contentClass}
+        footerClass={footerClass}
       >
         {children}
       </Shared_Modal_ModalOverlay>
