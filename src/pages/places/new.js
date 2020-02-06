@@ -1,9 +1,15 @@
-import React, { Fragment } from "react";
+/* eslint-disable react/jsx-pascal-case */
+import React from "react";
+import Shared_FormInput from "../../components/shared/form-input";
 
 const P_Places_New = () => (
-  <Fragment>
-    <h1>New Place Page</h1>
-  </Fragment>
+  <form className="place-form">
+    <Shared_FormInput
+      type="text"
+      label="Title"
+      errorMessage="Please enter a valid title."
+    />
+  </form>
 );
 
 export default P_Places_New;
