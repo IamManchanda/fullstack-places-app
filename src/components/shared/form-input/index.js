@@ -28,17 +28,19 @@ const Shared_FormInput = ({
   errorMessage,
   handleInputChange,
   validators,
+  value,
+  valid,
   children,
 }) => {
   const [inputState, dispatch] = useReducer(inputReducer, {
-    value: "",
-    isValid: false,
+    value: value || "",
+    isValid: valid || false,
     isDirty: false,
   });
-  const { value, isValid } = inputState;
+  const { value: inputStateValue, isValid } = inputState;
   useEffect(() => {
-    handleInputChange(id, value, isValid);
-  }, [id, isValid, value, handleInputChange]);
+    handleInputChange(id, inputStateValue, isValid);
+  }, [id, isValid, inputStateValue, handleInputChange]);
   const handleChange = event => {
     dispatch({ type: "CHANGE", value: event.target.value, validators });
   };
