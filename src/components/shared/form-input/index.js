@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
 import { validate } from "../../../utils/validators";
 
 const inputReducer = (state, { type, value, validators }) => {
@@ -26,19 +26,24 @@ const Shared_FormInput = ({
   placeholder,
   rows,
   errorMessage,
+  handleInputChange,
   validators,
   children,
 }) => {
-  const [inputState, dispatchState] = useReducer(inputReducer, {
+  const [inputState, dispatch] = useReducer(inputReducer, {
     value: "",
     isValid: false,
     isDirty: false,
   });
+  const { value, isValid } = inputState;
+  useEffect(() => {
+    handleInputChange(id, value, isValid);
+  }, [id, isValid, value, handleInputChange]);
   const handleChange = event => {
-    dispatchState({ type: "CHANGE", value: event.target.value, validators });
+    dispatch({ type: "CHANGE", value: event.target.value, validators });
   };
   const handleTouch = () => {
-    dispatchState({ type: "TOUCH" });
+    dispatch({ type: "TOUCH" });
   };
   return (
     <div

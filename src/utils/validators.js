@@ -27,16 +27,16 @@ export const validate = (value, validators) => {
       isValid = isValid && value.trim().length > 0;
     }
     if (validator.type === VALIDATOR_TYPE_MINLENGTH) {
-      isValid = isValid && value.trim().length >= validator.val;
+      isValid = isValid && value.trim().length >= validator.value;
     }
     if (validator.type === VALIDATOR_TYPE_MAXLENGTH) {
-      isValid = isValid && value.trim().length <= validator.val;
+      isValid = isValid && value.trim().length <= validator.value;
     }
     if (validator.type === VALIDATOR_TYPE_MIN) {
-      isValid = isValid && +value >= validator.val;
+      isValid = isValid && +value >= validator.value;
     }
     if (validator.type === VALIDATOR_TYPE_MAX) {
-      isValid = isValid && +value <= validator.val;
+      isValid = isValid && +value <= validator.value;
     }
     if (validator.type === VALIDATOR_TYPE_EMAIL) {
       isValid = isValid && /^\S+@\S+\.\S+$/.test(value);
