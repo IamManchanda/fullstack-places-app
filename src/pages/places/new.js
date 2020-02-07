@@ -34,24 +34,27 @@ const formReducer = (state, { type, inputId, value, isValid }) => {
 };
 
 const P_Places_New = () => {
+  const validationInputsIds = ["title", "description", "address"];
+  const inputs = {};
+  validationInputsIds.forEach(id => {
+    inputs[id] = {
+      value: "",
+      isValid: false,
+    };
+  });
   const [formState, dispatch] = useReducer(formReducer, {
-    inputs: {
-      title: {
-        value: "",
-        isValid: false,
-      },
-      description: {
-        value: "",
-        isValid: false,
-      },
-    },
+    inputs,
     isValid: false,
   });
   const handleInputChange = useCallback((id, value, isValid) => {
     dispatch({ type: "INPUT_CHANGE", inputId: id, value, isValid });
   }, []);
+  const handlePlaceSubmit = event => {
+    event.preventDefault();
+    console.log({ formState });
+  };
   return (
-    <form className="place-form">
+    <form className="place-form" onSubmit={handlePlaceSubmit}>
       <Shared_FormInput
         id="title"
         type="text"
@@ -67,6 +70,14 @@ const P_Places_New = () => {
         validators={[VALIDATOR_MINLENGTH(5)]}
         handleInputChange={handleInputChange}
         errorMessage="Please enter a valid description (atleast 5 characters)."
+      />
+      <Shared_FormInput
+        id="address"
+        type="text"
+        label="Address"
+        validators={[VALIDATOR_REQUIRE(5)]}
+        handleInputChange={handleInputChange}
+        errorMessage="Please enter a valid address."
       />
       <Shared_Button type="submit" disabled={!formState.isValid}>
         Add a Place
