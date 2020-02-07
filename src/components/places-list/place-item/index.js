@@ -47,7 +47,7 @@ const PlacesList_PlaceItem = ({
             <Shared_Button handleClick={handleOpenMap} inverse>
               View on Map
             </Shared_Button>
-            <Shared_Button to={`/places/${id}`}>Edit</Shared_Button>
+            <Shared_Button to={`/places/${id}/edit`}>Edit</Shared_Button>
             <Shared_Button danger>Delete</Shared_Button>
           </div>
         </Shared_Card>
