@@ -8,6 +8,7 @@ import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
 } from "../../../utils/validators";
+import { useForm } from "../../../hooks/form";
 
 const P_Places_PlaceId_Edit = () => {
   const [places] = useState([
@@ -39,8 +40,10 @@ const P_Places_PlaceId_Edit = () => {
     },
   ]);
   const { placeId } = useParams();
+
+  const validationInputsIds = ["title", "description"];
+  const [formState, handleInputChange] = useForm(validationInputsIds, false);
   const currentPlace = places.find(place => place.id === placeId);
-  console.log({ currentPlace });
   if (!currentPlace) {
     return (
       <div className="center">
@@ -48,17 +51,22 @@ const P_Places_PlaceId_Edit = () => {
       </div>
     );
   }
+  const handlePlaceSubmit = event => {
+    event.preventDefault();
+    console.log({ formState });
+  };
   return (
-    <form className="place-form">
+    <form className="place-form" onSubmit={handlePlaceSubmit}>
       <Shared_FormInput
         id="title"
         type="text"
         label="Title"
         validators={[VALIDATOR_REQUIRE()]}
         errorMessage="Please enter a valid title."
-        handleInputChange={() => {}}
-        value={currentPlace.title}
-        valid={true}
+        handleInputChange={handleInputChange}
+        /* value={currentPlace.title} */
+        value={formState.inputs.title.value}
+        valid={formState.inputs.title.isValid}
       />
       <Shared_FormInput
         id="description"
@@ -66,11 +74,12 @@ const P_Places_PlaceId_Edit = () => {
         label="Description"
         validators={[VALIDATOR_MINLENGTH(5)]}
         errorMessage="Please enter a valid description (atleast 5 characters)."
-        handleInputChange={() => {}}
-        value={currentPlace.description}
-        valid={true}
+        handleInputChange={handleInputChange}
+        /* value={currentPlace.description} */
+        value={formState.inputs.description.value}
+        valid={formState.inputs.description.isValid}
       />
-      <Shared_Button type="submit" disabled={true}>
+      <Shared_Button type="submit" disabled={!formState.isValid}>
         Update a Place
       </Shared_Button>
     </form>

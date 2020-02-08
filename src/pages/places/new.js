@@ -1,54 +1,13 @@
 /* eslint-disable react/jsx-pascal-case */
-import React, { useCallback, useReducer } from "react";
+import React from "react";
 import Shared_FormInput from "../../components/shared/form-input";
 import Shared_Button from "../../components/shared/button";
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from "../../utils/validators";
-
-const formReducer = (state, { type, inputId, value, isValid }) => {
-  switch (type) {
-    case "INPUT_CHANGE":
-      let isFormValid = true;
-      for (const stateInputId in state.inputs) {
-        if (state.inputs.hasOwnProperty(stateInputId)) {
-          if (stateInputId === inputId) {
-            isFormValid = isFormValid && isValid;
-          } else {
-            isFormValid = isFormValid && state.inputs[stateInputId].isValid;
-          }
-        }
-      }
-      return {
-        ...state,
-        inputs: {
-          ...state.inputs,
-          [inputId]: {
-            value,
-            isValid,
-          },
-        },
-        isValid: isFormValid,
-      };
-    default:
-      return state;
-  }
-};
+import { useForm } from "../../hooks/form";
 
 const P_Places_New = () => {
   const validationInputsIds = ["title", "description", "address"];
-  const inputs = {};
-  validationInputsIds.forEach(id => {
-    inputs[id] = {
-      value: "",
-      isValid: false,
-    };
-  });
-  const [formState, dispatch] = useReducer(formReducer, {
-    inputs,
-    isValid: false,
-  });
-  const handleInputChange = useCallback((id, value, isValid) => {
-    dispatch({ type: "INPUT_CHANGE", inputId: id, value, isValid });
-  }, []);
+  const [formState, handleInputChange] = useForm(validationInputsIds, false);
   const handlePlaceSubmit = event => {
     event.preventDefault();
     console.log({ formState });
