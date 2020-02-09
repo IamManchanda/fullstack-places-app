@@ -29,16 +29,9 @@ const formReducer = (state, { type, inputId, value, isValid }) => {
   }
 };
 
-export const useForm = (initialValidationInputsIds, initialFormValidity) => {
-  const inputs = {};
-  initialValidationInputsIds.forEach(id => {
-    inputs[id] = {
-      value: "",
-      isValid: false,
-    };
-  });
+export const useForm = (initialInputs, initialFormValidity) => {
   const [formState, dispatch] = useReducer(formReducer, {
-    inputs,
+    inputs: initialInputs,
     isValid: initialFormValidity,
   });
   const handleInputChange = useCallback((id, value, isValid) => {

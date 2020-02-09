@@ -40,10 +40,17 @@ const P_Places_PlaceId_Edit = () => {
     },
   ]);
   const { placeId } = useParams();
-
-  const validationInputsIds = ["title", "description"];
-  const [formState, handleInputChange] = useForm(validationInputsIds, false);
   const currentPlace = places.find(place => place.id === placeId);
+  const validationInputsIds = ["title", "description"];
+  const inputs = {};
+  validationInputsIds.forEach(id => {
+    inputs[id] = {
+      value: currentPlace[id],
+      isValid: true,
+    };
+  });
+  const [formState, handleInputChange] = useForm(inputs, false);
+
   if (!currentPlace) {
     return (
       <div className="center">
@@ -51,6 +58,7 @@ const P_Places_PlaceId_Edit = () => {
       </div>
     );
   }
+
   const handlePlaceSubmit = event => {
     event.preventDefault();
     console.log({ formState });
