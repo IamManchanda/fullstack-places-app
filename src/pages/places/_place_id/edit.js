@@ -94,7 +94,6 @@ const P_Places_PlaceId_Edit = () => {
         validators={[VALIDATOR_REQUIRE()]}
         errorMessage="Please enter a valid title."
         handleInputChange={handleInputChange}
-        /* value={currentPlace.title} */
         value={formState.inputs.title.value}
         valid={formState.inputs.title.isValid}
       />
@@ -106,7 +105,6 @@ const P_Places_PlaceId_Edit = () => {
         validators={[VALIDATOR_MINLENGTH(5)]}
         errorMessage="Please enter a valid description (atleast 5 characters)."
         handleInputChange={handleInputChange}
-        /* value={currentPlace.description} */
         value={formState.inputs.description.value}
         valid={formState.inputs.description.isValid}
       />
