@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 
 import Shared_FormInput from "../../../components/shared/form-input";
 import Shared_Button from "../../../components/shared/button";
+import Shared_Card from "../../../components/shared/card";
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
@@ -55,20 +56,24 @@ const P_Places_PlaceId_Edit = () => {
   const currentPlace = places.find(place => place.id === placeId);
 
   useEffect(() => {
-    setFormData(
-      {
-        title: { value: currentPlace.title, isValid: true },
-        description: { value: currentPlace.description, isValid: true },
-      },
-      true,
-    );
+    if (currentPlace) {
+      setFormData(
+        {
+          title: { value: currentPlace.title, isValid: true },
+          description: { value: currentPlace.description, isValid: true },
+        },
+        true,
+      );
+    }
     setLoading(false);
   }, [currentPlace, setFormData]);
 
   if (!currentPlace) {
     return (
       <div className="center">
-        <h2>Could not find a place.</h2>
+        <Shared_Card>
+          <h2>Could not find a place.</h2>
+        </Shared_Card>
       </div>
     );
   }
@@ -76,7 +81,7 @@ const P_Places_PlaceId_Edit = () => {
   if (isLoading) {
     return (
       <div className="center">
-        <h2>Loading.</h2>
+        <h2>Loading...</h2>
       </div>
     );
   }

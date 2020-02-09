@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-pascal-case */
 import React from "react";
 import Shared_Card from "../shared/card";
+import Shared_Button from "../shared/button";
 import PlacesList_PlaceItem from "./place-item";
 
 const PlacesList = ({ places }) => {
@@ -9,7 +10,7 @@ const PlacesList = ({ places }) => {
       <div className="places-list center h-full">
         <Shared_Card>
           <h2>No Places found. Maybe Create One?</h2>
-          <button>Share Place</button>
+          <Shared_Button to="/places/new">Share Place</Shared_Button>
         </Shared_Card>
       </div>
     );
