@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-pascal-case */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import Shared_FormInput from "../../../components/shared/form-input";
@@ -11,6 +11,18 @@ import {
 import { useForm } from "../../../hooks/form";
 
 const P_Places_PlaceId_Edit = () => {
+  const [isLoading, setLoading] = useState(true);
+
+  const validationInputsIds = ["title", "description"];
+  const [formState, handleInputChange, setFormData] = useForm(
+    validationInputsIds,
+    false,
+  );
+  const handlePlaceSubmit = event => {
+    event.preventDefault();
+    console.log({ formState });
+  };
+
   const [places] = useState([
     {
       id: "p1",
@@ -40,10 +52,19 @@ const P_Places_PlaceId_Edit = () => {
     },
   ]);
   const { placeId } = useParams();
-
-  const validationInputsIds = ["title", "description"];
-  const [formState, handleInputChange] = useForm(validationInputsIds, false);
   const currentPlace = places.find(place => place.id === placeId);
+
+  useEffect(() => {
+    setFormData(
+      {
+        title: { value: currentPlace.title, isValid: true },
+        description: { value: currentPlace.description, isValid: true },
+      },
+      true,
+    );
+    setLoading(false);
+  }, [currentPlace, setFormData]);
+
   if (!currentPlace) {
     return (
       <div className="center">
@@ -51,10 +72,14 @@ const P_Places_PlaceId_Edit = () => {
       </div>
     );
   }
-  const handlePlaceSubmit = event => {
-    event.preventDefault();
-    console.log({ formState });
-  };
+
+  if (isLoading) {
+    return (
+      <div className="center">
+        <h2>Loading.</h2>
+      </div>
+    );
+  }
   return (
     <form className="place-form" onSubmit={handlePlaceSubmit}>
       <Shared_FormInput
@@ -68,6 +93,7 @@ const P_Places_PlaceId_Edit = () => {
         value={formState.inputs.title.value}
         valid={formState.inputs.title.isValid}
       />
+
       <Shared_FormInput
         id="description"
         type="textarea"
@@ -79,6 +105,7 @@ const P_Places_PlaceId_Edit = () => {
         value={formState.inputs.description.value}
         valid={formState.inputs.description.isValid}
       />
+
       <Shared_Button type="submit" disabled={!formState.isValid}>
         Update a Place
       </Shared_Button>
