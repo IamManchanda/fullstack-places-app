@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-pascal-case */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import Shared_FormInput from "../../../components/shared/form-input";
 import Shared_Button from "../../../components/shared/button";
+import Shared_Card from "../../../components/shared/card";
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
@@ -11,6 +12,18 @@ import {
 import { useForm } from "../../../hooks/form";
 
 const P_Places_PlaceId_Edit = () => {
+  const [isLoading, setLoading] = useState(true);
+
+  const validationInputsIds = ["title", "description"];
+  const [formState, handleInputChange, setFormData] = useForm(
+    validationInputsIds,
+    false,
+  );
+  const handlePlaceSubmit = event => {
+    event.preventDefault();
+    console.log({ formState });
+  };
+
   const [places] = useState([
     {
       id: "p1",
@@ -41,28 +54,37 @@ const P_Places_PlaceId_Edit = () => {
   ]);
   const { placeId } = useParams();
   const currentPlace = places.find(place => place.id === placeId);
-  const validationInputsIds = ["title", "description"];
-  const inputs = {};
-  validationInputsIds.forEach(id => {
-    inputs[id] = {
-      value: currentPlace[id],
-      isValid: true,
-    };
-  });
-  const [formState, handleInputChange] = useForm(inputs, false);
+
+  useEffect(() => {
+    if (currentPlace) {
+      setFormData(
+        {
+          title: { value: currentPlace.title, isValid: true },
+          description: { value: currentPlace.description, isValid: true },
+        },
+        true,
+      );
+    }
+    setLoading(false);
+  }, [currentPlace, setFormData]);
 
   if (!currentPlace) {
     return (
       <div className="center">
-        <h2>Could not find a place.</h2>
+        <Shared_Card>
+          <h2>Could not find a place.</h2>
+        </Shared_Card>
       </div>
     );
   }
 
-  const handlePlaceSubmit = event => {
-    event.preventDefault();
-    console.log({ formState });
-  };
+  if (isLoading) {
+    return (
+      <div className="center">
+        <h2>Loading...</h2>
+      </div>
+    );
+  }
   return (
     <form className="place-form" onSubmit={handlePlaceSubmit}>
       <Shared_FormInput
@@ -76,6 +98,7 @@ const P_Places_PlaceId_Edit = () => {
         value={formState.inputs.title.value}
         valid={formState.inputs.title.isValid}
       />
+
       <Shared_FormInput
         id="description"
         type="textarea"
@@ -87,6 +110,7 @@ const P_Places_PlaceId_Edit = () => {
         value={formState.inputs.description.value}
         valid={formState.inputs.description.isValid}
       />
+
       <Shared_Button type="submit" disabled={!formState.isValid}>
         Update a Place
       </Shared_Button>

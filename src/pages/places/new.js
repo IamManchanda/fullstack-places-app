@@ -7,14 +7,7 @@ import { useForm } from "../../hooks/form";
 
 const P_Places_New = () => {
   const validationInputsIds = ["title", "description", "address"];
-  const inputs = {};
-  validationInputsIds.forEach(id => {
-    inputs[id] = {
-      value: "",
-      isValid: false,
-    };
-  });
-  const [formState, handleInputChange] = useForm(inputs, false);
+  const [formState, handleInputChange] = useForm(validationInputsIds, false);
   const handlePlaceSubmit = event => {
     event.preventDefault();
     console.log({ formState });

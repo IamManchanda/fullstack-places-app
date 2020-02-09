@@ -15,8 +15,15 @@ const PlacesList_PlaceItem = ({
   location,
 }) => {
   const [showMap, setShowMap] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const handleOpenMap = () => setShowMap(true);
   const handleCloseMap = () => setShowMap(false);
+  const handleDeleteWarning = () => setShowConfirm(true);
+  const handleDeleteCancel = () => setShowConfirm(false);
+  const handleDeleteConfirmation = () => {
+    console.log("Deleting");
+    setShowConfirm(false);
+  };
   return (
     <Fragment>
       <Shared_Modal
@@ -33,6 +40,27 @@ const PlacesList_PlaceItem = ({
           <Shared_Map center={location} zoom={16} />
         </div>
       </Shared_Modal>
+      <Shared_Modal
+        show={showConfirm}
+        handleCancel={handleDeleteCancel}
+        header="Are you Sure?"
+        footerClass="place-item__modal-actions"
+        footer={
+          <Fragment>
+            <Shared_Button inverse handleClick={handleDeleteCancel}>
+              Cancel
+            </Shared_Button>
+            <Shared_Button danger handleClick={handleDeleteConfirmation}>
+              Delete
+            </Shared_Button>
+          </Fragment>
+        }
+      >
+        <p>
+          Do you want to proceed and delete this place? Please note that it
+          can't be undone thereafter.
+        </p>
+      </Shared_Modal>
       <li className="place-item">
         <Shared_Card className="place-item__content">
           <div className="place-item__image">
@@ -48,7 +76,9 @@ const PlacesList_PlaceItem = ({
               View on Map
             </Shared_Button>
             <Shared_Button to={`/places/${id}/edit`}>Edit</Shared_Button>
-            <Shared_Button danger>Delete</Shared_Button>
+            <Shared_Button danger handleClick={handleDeleteWarning}>
+              Delete
+            </Shared_Button>
           </div>
         </Shared_Card>
       </li>
