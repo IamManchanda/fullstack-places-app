@@ -1,10 +1,21 @@
 /* eslint-disable react/jsx-pascal-case */
 import React from "react";
 import Auth from "../../components/auth";
-import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH } from "../../utils/validators";
+import {
+  VALIDATOR_REQUIRE,
+  VALIDATOR_EMAIL,
+  VALIDATOR_MINLENGTH,
+} from "../../utils/validators";
 
-const P_Auth_Login = () => {
+const P_Auth_Signup = () => {
   const inputs = [
+    {
+      id: "name",
+      type: "name",
+      label: "Name",
+      validators: [VALIDATOR_REQUIRE()],
+      errorMessage: "Please enter your Name.",
+    },
     {
       id: "email",
       type: "email",
@@ -20,7 +31,7 @@ const P_Auth_Login = () => {
       errorMessage: "Please enter a valid password, atleast 5 characters long.",
     },
   ];
-  return <Auth type="login" inputs={inputs} />;
+  return <Auth type="signup" inputs={inputs} />;
 };
 
-export default P_Auth_Login;
+export default P_Auth_Signup;

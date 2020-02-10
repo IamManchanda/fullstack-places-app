@@ -18,6 +18,9 @@ const Navigation_NavLinks = props => (
     <li>
       <NavLink to="/auth/login">Login</NavLink>
     </li>
+    <li>
+      <NavLink to="/auth/signup">Signup</NavLink>
+    </li>
   </ul>
 );
 
