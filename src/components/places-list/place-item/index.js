@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-pascal-case */
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
 import Shared_Card from "../../shared/card";
 import Shared_Button from "../../shared/button";
 import Shared_Modal from "../../shared/modal";
 import Shared_Map from "../../shared/map";
+import AuthContext from "../../../context/auth";
 
 const PlacesList_PlaceItem = ({
   id,
@@ -14,6 +15,7 @@ const PlacesList_PlaceItem = ({
   creator,
   location,
 }) => {
+  const { isLoggedIn } = useContext(AuthContext);
   const [showMap, setShowMap] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const handleOpenMap = () => setShowMap(true);
@@ -75,10 +77,14 @@ const PlacesList_PlaceItem = ({
             <Shared_Button handleClick={handleOpenMap} inverse>
               View on Map
             </Shared_Button>
-            <Shared_Button to={`/places/${id}/edit`}>Edit</Shared_Button>
-            <Shared_Button danger handleClick={handleDeleteWarning}>
-              Delete
-            </Shared_Button>
+            {isLoggedIn && (
+              <Fragment>
+                <Shared_Button to={`/places/${id}/edit`}>Edit</Shared_Button>
+                <Shared_Button danger handleClick={handleDeleteWarning}>
+                  Delete
+                </Shared_Button>
+              </Fragment>
+            )}
           </div>
         </Shared_Card>
       </li>
