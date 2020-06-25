@@ -19,10 +19,35 @@ const Auth = ({ type, inputs, history }) => {
   const authContent = type === "login" ? "Login" : "signup" ? "Signup" : "";
   const handleAuthSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
+
+    if (type === "login") {
+      try {
+        const response = await fetch("http://localhost:5000/api/users/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: formState.inputs.email.value,
+            password: formState.inputs.password.value,
+          }),
+        });
+        const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
+        setIsLoading(false);
+        login();
+        history.push("/");
+      } catch (error) {
+        setIsLoading(false);
+        setError(error.message || "Something went wrong, please try again.");
+      }
+    }
 
     if (type === "signup") {
       try {
-        setIsLoading(true);
         const response = await fetch("http://localhost:5000/api/users/signup", {
           method: "POST",
           headers: {
@@ -38,7 +63,6 @@ const Auth = ({ type, inputs, history }) => {
         if (!response.ok) {
           throw new Error(responseData.message);
         }
-        console.log({ responseData });
         setIsLoading(false);
         login();
         history.push("/");
