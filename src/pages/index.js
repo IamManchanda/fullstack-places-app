@@ -20,7 +20,7 @@ const P_Index = () => {
           }
           setLoadedUsers(responseData.users);
         } catch (error) {
-          setError(error.message);
+          setError(error.message || "Something went wrong, please try again.");
         } finally {
           setIsLoading(false);
         }
