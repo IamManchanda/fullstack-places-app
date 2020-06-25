@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-pascal-case */
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { withRouter } from "react-router-dom";
 
 import Shared_Card from "../shared/card";
@@ -10,6 +10,8 @@ import AuthContext from "../../context/auth";
 
 const Auth = ({ type, inputs, history }) => {
   const { login } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
   const validationInputsIds = inputs.map((input) => input.id);
   const [formState, handleInputChange] = useForm(validationInputsIds, false);
   const handleAuthSubmit = async (event) => {
@@ -17,6 +19,7 @@ const Auth = ({ type, inputs, history }) => {
 
     if (type === "signup") {
       try {
+        setIsLoading(true);
         const response = await fetch("http://localhost:5000/api/users/signup", {
           method: "POST",
           headers: {
@@ -30,10 +33,12 @@ const Auth = ({ type, inputs, history }) => {
         });
         const responseData = await response.json();
         console.log({ responseData });
+        setIsLoading(false);
         login();
         history.push("/");
       } catch (error) {
-        console.error(error);
+        setIsLoading(false);
+        setError(error.message || "Something went wrong, please try again.");
       }
     }
   };
