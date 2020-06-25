@@ -10,13 +10,32 @@ import AuthContext from "../../context/auth";
 
 const Auth = ({ type, inputs, history }) => {
   const { login } = useContext(AuthContext);
-  const validationInputsIds = inputs.map(input => input.id);
+  const validationInputsIds = inputs.map((input) => input.id);
   const [formState, handleInputChange] = useForm(validationInputsIds, false);
-  const handleAuthSubmit = event => {
+  const handleAuthSubmit = async (event) => {
     event.preventDefault();
-    console.log({ formState, type });
-    login();
-    history.push("/");
+
+    if (type === "signup") {
+      try {
+        const response = await fetch("http://localhost:5000/api/users/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: formState.inputs.name.value,
+            email: formState.inputs.email.value,
+            password: formState.inputs.password.value,
+          }),
+        });
+        const responseData = await response.json();
+        console.log({ responseData });
+        login();
+        history.push("/");
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
   const authContent = type === "login" ? "Login" : "signup" ? "Signup" : "";
   return (
@@ -24,7 +43,7 @@ const Auth = ({ type, inputs, history }) => {
       <h2>{authContent} Required</h2>
       <hr />
       <form onSubmit={handleAuthSubmit}>
-        {inputs.map(input => (
+        {inputs.map((input) => (
           <Shared_FormInput
             key={input.id}
             handleInputChange={handleInputChange}
