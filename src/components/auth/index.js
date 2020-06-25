@@ -8,74 +8,57 @@ import Shared_Button from "../shared/button";
 import Shared_ErrorModal from "../shared/error-modal";
 import Shared_LoadingSpinner from "../shared/loading-spinner";
 import { useForm } from "../../hooks/form";
+import { useHttpClient } from "../../hooks/http-client";
 import AuthContext from "../../context/auth";
 
 const Auth = ({ type, inputs, history }) => {
   const { login } = useContext(AuthContext);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
+  const [isLoading, error, sendRequest, clearError] = useHttpClient();
   const validationInputsIds = inputs.map((input) => input.id);
   const [formState, handleInputChange] = useForm(validationInputsIds, false);
   const authContent = type === "login" ? "Login" : "signup" ? "Signup" : "";
   const handleAuthSubmit = async (event) => {
     event.preventDefault();
-    setIsLoading(true);
-
     if (type === "login") {
+      console.log("Hello");
       try {
-        const response = await fetch("http://localhost:5000/api/users/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+        await sendRequest(
+          "http://localhost:5000/api/users/login",
+          "POST",
+          JSON.stringify({
             email: formState.inputs.email.value,
             password: formState.inputs.password.value,
           }),
-        });
-        const responseData = await response.json();
-        if (!response.ok) {
-          throw new Error(responseData.message);
-        }
-        setIsLoading(false);
-        login();
-        history.push("/");
-      } catch (error) {
-        setIsLoading(false);
-        setError(error.message || "Something went wrong, please try again.");
-      }
-    }
-
-    if (type === "signup") {
-      try {
-        const response = await fetch("http://localhost:5000/api/users/signup", {
-          method: "POST",
-          headers: {
+          {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
+        );
+        login();
+        history.push("/");
+      } catch (error) {}
+    }
+    if (type === "signup") {
+      try {
+        await sendRequest(
+          "http://localhost:5000/api/users/signup",
+          "POST",
+          JSON.stringify({
             name: formState.inputs.name.value,
             email: formState.inputs.email.value,
             password: formState.inputs.password.value,
           }),
-        });
-        const responseData = await response.json();
-        if (!response.ok) {
-          throw new Error(responseData.message);
-        }
-        setIsLoading(false);
+          {
+            "Content-Type": "application/json",
+          },
+        );
         login();
         history.push("/");
-      } catch (error) {
-        setIsLoading(false);
-        setError(error.message || "Something went wrong, please try again.");
-      }
+      } catch (error) {}
     }
   };
-  const handleError = () => setError(null);
   return (
     <Fragment>
-      <Shared_ErrorModal error={error} handleClear={handleError} />
+      <Shared_ErrorModal error={error} handleClear={clearError} />
       <Shared_Card className="authentication">
         {isLoading && <Shared_LoadingSpinner asOverlay />}
         <h2>{authContent} Required</h2>
