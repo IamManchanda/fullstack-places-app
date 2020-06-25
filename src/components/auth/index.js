@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-pascal-case */
-import React, { useContext, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import { withRouter } from "react-router-dom";
 
 import Shared_Card from "../shared/card";
@@ -16,6 +16,7 @@ const Auth = ({ type, inputs, history }) => {
   const [error, setError] = useState();
   const validationInputsIds = inputs.map((input) => input.id);
   const [formState, handleInputChange] = useForm(validationInputsIds, false);
+  const authContent = type === "login" ? "Login" : "signup" ? "Signup" : "";
   const handleAuthSubmit = async (event) => {
     event.preventDefault();
 
@@ -34,6 +35,9 @@ const Auth = ({ type, inputs, history }) => {
           }),
         });
         const responseData = await response.json();
+        if (!response.ok) {
+          throw new Error(responseData.message);
+        }
         console.log({ responseData });
         setIsLoading(false);
         login();
@@ -44,25 +48,28 @@ const Auth = ({ type, inputs, history }) => {
       }
     }
   };
-  const authContent = type === "login" ? "Login" : "signup" ? "Signup" : "";
+  const handleError = () => setError(null);
   return (
-    <Shared_Card className="authentication">
-      {isLoading && <Shared_LoadingSpinner asOverlay />}
-      <h2>{authContent} Required</h2>
-      <hr />
-      <form onSubmit={handleAuthSubmit}>
-        {inputs.map((input) => (
-          <Shared_FormInput
-            key={input.id}
-            handleInputChange={handleInputChange}
-            {...input}
-          />
-        ))}
-        <Shared_Button type="submit" disabled={!formState.isValid}>
-          {authContent.toUpperCase()}
-        </Shared_Button>
-      </form>
-    </Shared_Card>
+    <Fragment>
+      <Shared_ErrorModal error={error} handleClear={handleError} />
+      <Shared_Card className="authentication">
+        {isLoading && <Shared_LoadingSpinner asOverlay />}
+        <h2>{authContent} Required</h2>
+        <hr />
+        <form onSubmit={handleAuthSubmit}>
+          {inputs.map((input) => (
+            <Shared_FormInput
+              key={input.id}
+              handleInputChange={handleInputChange}
+              {...input}
+            />
+          ))}
+          <Shared_Button type="submit" disabled={!formState.isValid}>
+            {authContent.toUpperCase()}
+          </Shared_Button>
+        </form>
+      </Shared_Card>
+    </Fragment>
   );
 };
 
