@@ -3,35 +3,27 @@ import React, { Fragment, useEffect, useState } from "react";
 import UsersList from "../components/users-list";
 import Shared_ErrorModal from "../components/shared/error-modal";
 import Shared_LoadingSpinner from "../components/shared/loading-spinner";
+import { useHttpClient } from "../hooks/http-client";
 
 const P_Index = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
   const [loadedUsers, setLoadedUsers] = useState(false);
+  const [isLoading, error, sendRequest, clearError] = useHttpClient();
   useEffect(
     function handleLoadedUsers() {
       (async function fetchUsers() {
-        setIsLoading(true);
         try {
-          const response = await fetch("http://localhost:5000/api/users");
-          const responseData = await response.json();
-          if (!response.ok) {
-            throw new Error(responseData.message);
-          }
+          const responseData = await sendRequest(
+            "http://localhost:5000/api/users",
+          );
           setLoadedUsers(responseData.users);
-        } catch (error) {
-          setError(error.message || "Something went wrong, please try again.");
-        } finally {
-          setIsLoading(false);
-        }
+        } catch (error) {}
       })();
     },
-    [error.message],
+    [sendRequest],
   );
-  const handleError = () => setError(null);
   return (
     <Fragment>
-      <Shared_ErrorModal error={error} handleClear={handleError} />
+      <Shared_ErrorModal error={error} handleClear={clearError} />
       {isLoading && (
         <div className="center">
           <Shared_LoadingSpinner />
