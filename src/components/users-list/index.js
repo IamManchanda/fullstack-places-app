@@ -15,8 +15,12 @@ const UsersList = ({ users }) => {
   }
   return (
     <ul className="users-list">
-      {users.map(user => (
-        <UsersList_UserItem key={user.id} {...user} />
+      {users.map((user) => (
+        <UsersList_UserItem
+          key={user.id}
+          {...user}
+          places={user.places.length}
+        />
       ))}
     </ul>
   );

@@ -1,42 +1,45 @@
 /* eslint-disable react/jsx-pascal-case */
-import React, { useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import UsersList from "../components/users-list";
+import Shared_ErrorModal from "../components/shared/error-modal";
+import Shared_LoadingSpinner from "../components/shared/loading-spinner";
 
 const P_Index = () => {
-  const [users] = useState([
-    {
-      id: "u1",
-      name: "Shikhar Dhawan",
-      image: "http://p.imgci.com/db/PICTURES/CMS/263700/263700.20.jpg",
-      places: 1,
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [loadedUsers, setLoadedUsers] = useState(false);
+  useEffect(
+    function handleLoadedUsers() {
+      (async function fetchUsers() {
+        setIsLoading(true);
+        try {
+          const response = await fetch("http://localhost:5000/api/users");
+          const responseData = await response.json();
+          if (!response.ok) {
+            throw new Error(responseData.message);
+          }
+          setLoadedUsers(responseData.users);
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setIsLoading(false);
+        }
+      })();
     },
-    {
-      id: "u2",
-      name: "Rohit Sharma",
-      image: "http://p.imgci.com/db/PICTURES/CMS/222900/222915.jpg",
-      places: 2,
-    },
-    {
-      id: "u3",
-      name: "Virat Kohli",
-      image: "http://p.imgci.com/db/PICTURES/CMS/289000/289002.1.jpg",
-      places: 3,
-    },
-    {
-      id: "u4",
-      name: "KL Rahul",
-      image: "http://p.imgci.com/db/PICTURES/CMS/289000/289001.1.jpg",
-      places: 4,
-    },
-    {
-      id: "u5",
-      name: "Rishabh Pant",
-      image: "http://p.imgci.com/db/PICTURES/CMS/233200/233209.5.jpg",
-      places: 5,
-    },
-  ]);
-
-  return <UsersList users={users} />;
+    [error.message],
+  );
+  const handleError = () => setError(null);
+  return (
+    <Fragment>
+      <Shared_ErrorModal error={error} handleClear={handleError} />
+      {isLoading && (
+        <div className="center">
+          <Shared_LoadingSpinner />
+        </div>
+      )}
+      {!isLoading && loadedUsers && <UsersList users={loadedUsers} />}
+    </Fragment>
+  );
 };
 
 export default P_Index;
