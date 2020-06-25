@@ -5,6 +5,8 @@ import { withRouter } from "react-router-dom";
 import Shared_Card from "../shared/card";
 import Shared_FormInput from "../shared/form-input";
 import Shared_Button from "../shared/button";
+import Shared_ErrorModal from "../shared/error-modal";
+import Shared_LoadingSpinner from "../shared/loading-spinner";
 import { useForm } from "../../hooks/form";
 import AuthContext from "../../context/auth";
 
@@ -45,6 +47,7 @@ const Auth = ({ type, inputs, history }) => {
   const authContent = type === "login" ? "Login" : "signup" ? "Signup" : "";
   return (
     <Shared_Card className="authentication">
+      {isLoading && <Shared_LoadingSpinner asOverlay />}
       <h2>{authContent} Required</h2>
       <hr />
       <form onSubmit={handleAuthSubmit}>
