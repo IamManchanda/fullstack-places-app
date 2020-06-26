@@ -4,7 +4,7 @@ import Shared_Card from "../shared/card";
 import Shared_Button from "../shared/button";
 import PlacesList_PlaceItem from "./place-item";
 
-const PlacesList = ({ places }) => {
+const PlacesList = ({ places, handleDelete }) => {
   if (!places || places.length === 0) {
     return (
       <div className="places-list center h-full">
@@ -17,8 +17,12 @@ const PlacesList = ({ places }) => {
   }
   return (
     <ul className="places-list">
-      {places.map(place => (
-        <PlacesList_PlaceItem key={place.id} {...place} />
+      {places.map((place) => (
+        <PlacesList_PlaceItem
+          key={place.id}
+          {...place}
+          handleDelete={handleDelete}
+        />
       ))}
     </ul>
   );

@@ -20,6 +20,11 @@ const P_Users_UserId_Places = () => {
       } catch (error) {}
     })();
   }, [sendRequest, userId]);
+  const handleDeletePlace = (deletedPlaceId) => {
+    setLoadedPlaces((prevPlaces) =>
+      prevPlaces.filter((place) => place.id !== deletedPlaceId),
+    );
+  };
   return (
     <Fragment>
       <Shared_ErrorModal error={error} handleClear={clearError} />
@@ -28,7 +33,9 @@ const P_Users_UserId_Places = () => {
           <Shared_LoadingSpinner />
         </div>
       )}
-      {!isLoading && loadedPlaces && <PlacesList places={loadedPlaces} />}
+      {!isLoading && loadedPlaces && (
+        <PlacesList places={loadedPlaces} handleDelete={handleDeletePlace} />
+      )}
     </Fragment>
   );
 };

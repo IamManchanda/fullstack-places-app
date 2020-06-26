@@ -4,7 +4,10 @@ import Shared_Card from "../../shared/card";
 import Shared_Button from "../../shared/button";
 import Shared_Modal from "../../shared/modal";
 import Shared_Map from "../../shared/map";
+import Shared_ErrorModal from "../../shared/error-modal";
+import Shared_LoadingSpinner from "../../shared/loading-spinner";
 import AuthContext from "../../../context/auth";
+import { useHttpClient } from "../../../hooks/http-client";
 
 const PlacesList_PlaceItem = ({
   id,
@@ -14,20 +17,26 @@ const PlacesList_PlaceItem = ({
   address,
   creator,
   location,
+  handleDelete,
 }) => {
   const { isLoggedIn } = useContext(AuthContext);
+  const [isLoading, error, sendRequest, clearError] = useHttpClient();
   const [showMap, setShowMap] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const handleOpenMap = () => setShowMap(true);
   const handleCloseMap = () => setShowMap(false);
   const handleDeleteWarning = () => setShowConfirm(true);
   const handleDeleteCancel = () => setShowConfirm(false);
-  const handleDeleteConfirmation = () => {
-    console.log("Deleting");
+  const handleDeleteConfirmation = async () => {
     setShowConfirm(false);
+    try {
+      await sendRequest(`http://localhost:5000/api/places/${id}`, "DELETE");
+      handleDelete(id);
+    } catch (error) {}
   };
   return (
     <Fragment>
+      <Shared_ErrorModal error={error} handleClear={clearError} />
       <Shared_Modal
         show={showMap}
         handleCancel={handleCloseMap}
@@ -64,6 +73,7 @@ const PlacesList_PlaceItem = ({
         </p>
       </Shared_Modal>
       <li className="place-item">
+        {isLoading && <Shared_LoadingSpinner asOverlay />}
         <Shared_Card className="place-item__content">
           <div className="place-item__image">
             <img src={image} alt={title} title={title} />
