@@ -19,7 +19,7 @@ const PlacesList_PlaceItem = ({
   location,
   handleDelete,
 }) => {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { userId, isLoggedIn } = useContext(AuthContext);
   const [isLoading, error, sendRequest, clearError] = useHttpClient();
   const [showMap, setShowMap] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -87,7 +87,7 @@ const PlacesList_PlaceItem = ({
             <Shared_Button handleClick={handleOpenMap} inverse>
               View on Map
             </Shared_Button>
-            {isLoggedIn && (
+            {isLoggedIn && userId === creator && (
               <Fragment>
                 <Shared_Button to={`/places/${id}/edit`}>Edit</Shared_Button>
                 <Shared_Button danger handleClick={handleDeleteWarning}>
