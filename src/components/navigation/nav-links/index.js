@@ -3,8 +3,8 @@ import React, { Fragment, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import AuthContext from "../../../context/auth";
 
-const Navigation_NavLinks = props => {
-  const { isLoggedIn, logout } = useContext(AuthContext);
+const Navigation_NavLinks = (props) => {
+  const { userId, isLoggedIn, logout } = useContext(AuthContext);
   return (
     <ul className="nav-links">
       <li>
@@ -15,7 +15,7 @@ const Navigation_NavLinks = props => {
       {isLoggedIn ? (
         <Fragment>
           <li>
-            <NavLink to="/users/u1/places">My Places</NavLink>
+            <NavLink to={`/users/${userId}/places`}>My Places</NavLink>
           </li>
           <li>
             <NavLink to="/places/new">Add New Place</NavLink>
