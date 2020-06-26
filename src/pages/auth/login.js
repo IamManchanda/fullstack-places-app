@@ -16,8 +16,8 @@ const P_Auth_Login = () => {
       id: "password",
       type: "password",
       label: "Password",
-      validators: [VALIDATOR_MINLENGTH(5)],
-      errorMessage: "Please enter a valid password, atleast 5 characters long.",
+      validators: [VALIDATOR_MINLENGTH(6)],
+      errorMessage: "Please enter a valid password, atleast 6 characters long.",
     },
   ];
   return <Auth type="login" inputs={inputs} />;
