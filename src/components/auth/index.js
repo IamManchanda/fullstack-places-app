@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-pascal-case */
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext } from "react";
 import { withRouter } from "react-router-dom";
 
 import Shared_Card from "../shared/card";
@@ -20,9 +20,8 @@ const Auth = ({ type, inputs, history }) => {
   const handleAuthSubmit = async (event) => {
     event.preventDefault();
     if (type === "login") {
-      console.log("Hello");
       try {
-        await sendRequest(
+        const responseData = await sendRequest(
           "http://localhost:5000/api/users/login",
           "POST",
           JSON.stringify({
@@ -33,13 +32,13 @@ const Auth = ({ type, inputs, history }) => {
             "Content-Type": "application/json",
           },
         );
-        login();
+        login(responseData.user.id);
         history.push("/");
       } catch (error) {}
     }
     if (type === "signup") {
       try {
-        await sendRequest(
+        const responseData = await sendRequest(
           "http://localhost:5000/api/users/signup",
           "POST",
           JSON.stringify({
@@ -51,7 +50,7 @@ const Auth = ({ type, inputs, history }) => {
             "Content-Type": "application/json",
           },
         );
-        login();
+        login(responseData.user.id);
         history.push("/");
       } catch (error) {}
     }

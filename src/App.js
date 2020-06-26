@@ -18,12 +18,19 @@ import { AuthProvider } from "./context/auth";
 import "./assets/styles.css";
 
 const App = () => {
-  const [isLoggedIn, setLoggedIn] = useState(false);
-  const login = useCallback(() => setLoggedIn(true), []);
-  const logout = useCallback(() => setLoggedIn(false), []);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userId, setUserId] = useState(false);
+  const login = useCallback((uid) => {
+    setIsLoggedIn(true);
+    setUserId(uid);
+  }, []);
+  const logout = useCallback(() => {
+    setIsLoggedIn(false);
+    setUserId(null);
+  }, []);
 
   return (
-    <AuthProvider value={{ isLoggedIn, login, logout }}>
+    <AuthProvider value={{ isLoggedIn, userId, login, logout }}>
       <Router>
         <Navigation_MainNavigation />
         <main>
