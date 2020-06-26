@@ -15,10 +15,26 @@ import { useHttpClient } from "../../../hooks/http-client";
 import AuthContext from "../../../context/auth";
 
 const P_Places_PlaceId_Edit = () => {
+  const inputs = [
+    {
+      id: "title",
+      type: "text",
+      label: "Title",
+      validators: [VALIDATOR_REQUIRE()],
+      errorMessage: "Please enter a valid title.",
+    },
+    {
+      id: "description",
+      type: "textarea",
+      label: "Description",
+      validators: [VALIDATOR_MINLENGTH(5)],
+      errorMessage: "Please enter a valid description (atleast 5 characters).",
+    },
+  ];
   const { userId } = useContext(AuthContext);
   const [isLoading, error, sendRequest, clearError] = useHttpClient();
   const [loadedPlace, setLoadedPlace] = useState();
-  const validationInputsIds = ["title", "description"];
+  const validationInputsIds = inputs.map((input) => input.id);
   const history = useHistory();
   const [formState, handleInputChange, setFormData] = useForm(
     validationInputsIds,
@@ -89,28 +105,15 @@ const P_Places_PlaceId_Edit = () => {
       <Shared_ErrorModal error={error} handleClear={clearError} />
       {!isLoading && loadedPlace && (
         <form className="place-form" onSubmit={handlePlaceSubmit}>
-          <Shared_FormInput
-            id="title"
-            type="text"
-            label="Title"
-            validators={[VALIDATOR_REQUIRE()]}
-            errorMessage="Please enter a valid title."
-            handleInputChange={handleInputChange}
-            value={loadedPlace.title}
-            valid={true}
-          />
-
-          <Shared_FormInput
-            id="description"
-            type="textarea"
-            label="Description"
-            validators={[VALIDATOR_MINLENGTH(5)]}
-            errorMessage="Please enter a valid description (atleast 5 characters)."
-            handleInputChange={handleInputChange}
-            value={loadedPlace.description}
-            valid={true}
-          />
-
+          {inputs.map((input) => (
+            <Shared_FormInput
+              key={input.id}
+              handleInputChange={handleInputChange}
+              value={loadedPlace[input.id]}
+              valid={true}
+              {...input}
+            />
+          ))}
           <Shared_Button type="submit" disabled={!formState.isValid}>
             Update a Place
           </Shared_Button>

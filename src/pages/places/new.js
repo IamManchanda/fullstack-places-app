@@ -11,8 +11,31 @@ import { useForm } from "../../hooks/form";
 import { useHttpClient } from "../../hooks/http-client";
 
 const P_Places_New = () => {
+  const inputs = [
+    {
+      id: "title",
+      type: "text",
+      label: "Title",
+      validators: [VALIDATOR_REQUIRE()],
+      errorMessage: "Please enter a valid title.",
+    },
+    {
+      id: "description",
+      type: "textarea",
+      label: "Description",
+      validators: [VALIDATOR_MINLENGTH(5)],
+      errorMessage: "Please enter a valid description (atleast 5 characters).",
+    },
+    {
+      id: "address",
+      type: "text",
+      label: "Address",
+      validators: [VALIDATOR_REQUIRE(5)],
+      errorMessage: "Please enter a valid address.",
+    },
+  ];
   const { userId } = useContext(AuthContext);
-  const validationInputsIds = ["title", "description", "address"];
+  const validationInputsIds = inputs.map((input) => input.id);
   const [formState, handleInputChange] = useForm(validationInputsIds, false);
   const [isLoading, error, sendRequest, clearError] = useHttpClient();
   const history = useHistory();
@@ -41,30 +64,13 @@ const P_Places_New = () => {
       <Shared_ErrorModal error={error} handleClear={clearError} />
       <form className="place-form" onSubmit={handlePlaceSubmit}>
         {isLoading && <Shared_LoadingSpinner asOverlay />}
-        <Shared_FormInput
-          id="title"
-          type="text"
-          label="Title"
-          validators={[VALIDATOR_REQUIRE()]}
-          handleInputChange={handleInputChange}
-          errorMessage="Please enter a valid title."
-        />
-        <Shared_FormInput
-          id="description"
-          type="textarea"
-          label="Description"
-          validators={[VALIDATOR_MINLENGTH(5)]}
-          handleInputChange={handleInputChange}
-          errorMessage="Please enter a valid description (atleast 5 characters)."
-        />
-        <Shared_FormInput
-          id="address"
-          type="text"
-          label="Address"
-          validators={[VALIDATOR_REQUIRE(5)]}
-          handleInputChange={handleInputChange}
-          errorMessage="Please enter a valid address."
-        />
+        {inputs.map((input) => (
+          <Shared_FormInput
+            key={input.id}
+            handleInputChange={handleInputChange}
+            {...input}
+          />
+        ))}
         <Shared_Button type="submit" disabled={!formState.isValid}>
           Add a Place
         </Shared_Button>
