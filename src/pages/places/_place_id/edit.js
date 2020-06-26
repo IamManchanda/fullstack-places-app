@@ -1,74 +1,80 @@
 /* eslint-disable react/jsx-pascal-case */
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-
+import React, { Fragment, useState, useEffect, useContext } from "react";
+import { useParams, useHistory } from "react-router-dom";
 import Shared_FormInput from "../../../components/shared/form-input";
 import Shared_Button from "../../../components/shared/button";
 import Shared_Card from "../../../components/shared/card";
+import Shared_ErrorModal from "../../../components/shared/error-modal";
+import Shared_LoadingSpinner from "../../../components/shared/loading-spinner";
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
 } from "../../../utils/validators";
 import { useForm } from "../../../hooks/form";
+import { useHttpClient } from "../../../hooks/http-client";
+import AuthContext from "../../../context/auth";
 
 const P_Places_PlaceId_Edit = () => {
-  const [isLoading, setLoading] = useState(true);
-
+  const { userId } = useContext(AuthContext);
+  const [isLoading, error, sendRequest, clearError] = useHttpClient();
+  const [loadedPlace, setLoadedPlace] = useState();
   const validationInputsIds = ["title", "description"];
+  const history = useHistory();
   const [formState, handleInputChange, setFormData] = useForm(
     validationInputsIds,
     false,
   );
-  const handlePlaceSubmit = event => {
+  const { placeId } = useParams();
+  useEffect(() => {
+    (async function fetchPlace() {
+      try {
+        const responseData = await sendRequest(
+          `http://localhost:5000/api/places/${placeId}`,
+        );
+        setLoadedPlace(responseData.place);
+        setFormData(
+          {
+            title: {
+              value: responseData.place.title,
+              isValid: true,
+            },
+            description: {
+              value: responseData.place.description,
+              isValid: true,
+            },
+          },
+          true,
+        );
+      } catch (error) {}
+    })();
+  }, [sendRequest, placeId, setFormData]);
+  const handlePlaceSubmit = async (event) => {
     event.preventDefault();
-    console.log({ formState });
+    try {
+      await sendRequest(
+        `http://localhost:5000/api/places/${placeId}`,
+        "PATCH",
+        JSON.stringify({
+          title: formState.inputs.title.value,
+          description: formState.inputs.description.value,
+        }),
+        {
+          "Content-Type": "application/json",
+        },
+      );
+      history.push(`/users/${userId}/places`);
+    } catch (error) {}
   };
 
-  const [places] = useState([
-    {
-      id: "p1",
-      image:
-        "https://untappedcities.com/wp-content/uploads/2015/07/Flatiron-Building-Secrets-Roof-Basement-Elevator-Sonny-Atis-GFP-NYC_5.jpg",
-      title: "Empire State Building",
-      description: "One of the most famous sky scrapers in the world.",
-      address: "20 W 34th St, New York, NY 10001, United States",
-      creator: "u1",
-      location: {
-        lat: 40.7484405,
-        lng: -73.9878531,
-      },
-    },
-    {
-      id: "p2",
-      image:
-        "https://untappedcities.com/wp-content/uploads/2015/07/Flatiron-Building-Secrets-Roof-Basement-Elevator-Sonny-Atis-GFP-NYC_5.jpg",
-      title: "Empire State Building",
-      description: "One of the most famous sky scrapers in the world.",
-      address: "20 W 34th St, New York, NY 10001, United States",
-      creator: "u2",
-      location: {
-        lat: 40.7484405,
-        lng: -73.9878531,
-      },
-    },
-  ]);
-  const { placeId } = useParams();
-  const currentPlace = places.find(place => place.id === placeId);
+  if (isLoading) {
+    return (
+      <div className="center">
+        <Shared_LoadingSpinner />
+      </div>
+    );
+  }
 
-  useEffect(() => {
-    if (currentPlace) {
-      setFormData(
-        {
-          title: { value: currentPlace.title, isValid: true },
-          description: { value: currentPlace.description, isValid: true },
-        },
-        true,
-      );
-    }
-    setLoading(false);
-  }, [currentPlace, setFormData]);
-
-  if (!currentPlace) {
+  if (!loadedPlace && !error) {
     return (
       <div className="center">
         <Shared_Card>
@@ -78,41 +84,39 @@ const P_Places_PlaceId_Edit = () => {
     );
   }
 
-  if (isLoading) {
-    return (
-      <div className="center">
-        <h2>Loading...</h2>
-      </div>
-    );
-  }
   return (
-    <form className="place-form" onSubmit={handlePlaceSubmit}>
-      <Shared_FormInput
-        id="title"
-        type="text"
-        label="Title"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorMessage="Please enter a valid title."
-        handleInputChange={handleInputChange}
-        value={formState.inputs.title.value}
-        valid={formState.inputs.title.isValid}
-      />
+    <Fragment>
+      <Shared_ErrorModal error={error} handleClear={clearError} />
+      {!isLoading && loadedPlace && (
+        <form className="place-form" onSubmit={handlePlaceSubmit}>
+          <Shared_FormInput
+            id="title"
+            type="text"
+            label="Title"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorMessage="Please enter a valid title."
+            handleInputChange={handleInputChange}
+            value={loadedPlace.title}
+            valid={true}
+          />
 
-      <Shared_FormInput
-        id="description"
-        type="textarea"
-        label="Description"
-        validators={[VALIDATOR_MINLENGTH(5)]}
-        errorMessage="Please enter a valid description (atleast 5 characters)."
-        handleInputChange={handleInputChange}
-        value={formState.inputs.description.value}
-        valid={formState.inputs.description.isValid}
-      />
+          <Shared_FormInput
+            id="description"
+            type="textarea"
+            label="Description"
+            validators={[VALIDATOR_MINLENGTH(5)]}
+            errorMessage="Please enter a valid description (atleast 5 characters)."
+            handleInputChange={handleInputChange}
+            value={loadedPlace.description}
+            valid={true}
+          />
 
-      <Shared_Button type="submit" disabled={!formState.isValid}>
-        Update a Place
-      </Shared_Button>
-    </form>
+          <Shared_Button type="submit" disabled={!formState.isValid}>
+            Update a Place
+          </Shared_Button>
+        </form>
+      )}
+    </Fragment>
   );
 };
 
