@@ -1,40 +1,36 @@
-import React, { useState } from "react";
+/* eslint-disable react/jsx-pascal-case */
+import React, { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PlacesList from "../../../components/places-list";
+import Shared_ErrorModal from "../../../components/shared/error-modal";
+import Shared_LoadingSpinner from "../../../components/shared/loading-spinner";
+import { useHttpClient } from "../../../hooks/http-client";
 
 const P_Users_UserId_Places = () => {
-  const [places] = useState([
-    {
-      id: "p1",
-      image:
-        "https://untappedcities.com/wp-content/uploads/2015/07/Flatiron-Building-Secrets-Roof-Basement-Elevator-Sonny-Atis-GFP-NYC_5.jpg",
-      title: "Empire State Building",
-      description: "One of the most famous sky scrapers in the world.",
-      address: "20 W 34th St, New York, NY 10001, United States",
-      creator: "u1",
-      location: {
-        lat: 40.7484405,
-        lng: -73.9878531,
-      },
-    },
-    {
-      id: "p2",
-      image:
-        "https://untappedcities.com/wp-content/uploads/2015/07/Flatiron-Building-Secrets-Roof-Basement-Elevator-Sonny-Atis-GFP-NYC_5.jpg",
-      title: "Empire State Building",
-      description: "One of the most famous sky scrapers in the world.",
-      address: "20 W 34th St, New York, NY 10001, United States",
-      creator: "u2",
-      location: {
-        lat: 40.7484405,
-        lng: -73.9878531,
-      },
-    },
-  ]);
-
+  const [loadedPlaces, setLoadedPlaces] = useState();
+  const [isLoading, error, sendRequest, clearError] = useHttpClient();
   const { userId } = useParams();
-  const placesByUserFilter = places.filter(place => place.creator === userId);
-  return <PlacesList places={placesByUserFilter} />;
+  useEffect(() => {
+    (async function fetchPlaces() {
+      try {
+        const responseData = await sendRequest(
+          `http://localhost:5000/api/places/user/${userId}`,
+        );
+        setLoadedPlaces(responseData.places);
+      } catch (error) {}
+    })();
+  }, [sendRequest, userId]);
+  return (
+    <Fragment>
+      <Shared_ErrorModal error={error} handleClear={clearError} />
+      {isLoading && (
+        <div className="center">
+          <Shared_LoadingSpinner />
+        </div>
+      )}
+      {!isLoading && loadedPlaces && <PlacesList places={loadedPlaces} />}
+    </Fragment>
+  );
 };
 
 export default P_Users_UserId_Places;
