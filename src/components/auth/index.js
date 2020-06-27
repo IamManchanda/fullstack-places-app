@@ -7,6 +7,7 @@ import Shared_FormInput from "../shared/form-input";
 import Shared_Button from "../shared/button";
 import Shared_ErrorModal from "../shared/error-modal";
 import Shared_LoadingSpinner from "../shared/loading-spinner";
+import Shared_ImageUpload from "../shared/image-upload";
 import { useForm } from "../../hooks/form";
 import { useHttpClient } from "../../hooks/http-client";
 import AuthContext from "../../context/auth";
@@ -70,6 +71,7 @@ const Auth = ({ type, inputs, history }) => {
               {...input}
             />
           ))}
+          {type === "signup" && <Shared_ImageUpload center id="image" />}
           <Shared_Button type="submit" disabled={!formState.isValid}>
             {authContent.toUpperCase()}
           </Shared_Button>
