@@ -15,11 +15,15 @@ import AuthContext from "../../context/auth";
 const Auth = ({ type, inputs, history }) => {
   const { login } = useContext(AuthContext);
   const [isLoading, error, sendRequest, clearError] = useHttpClient();
-  const validationInputsIds = inputs.map((input) => input.id);
+  const validationInputsIds = [
+    ...inputs.map((input) => input.id),
+    ...(type === "signup" ? ["image"] : []),
+  ];
   const [formState, handleInputChange] = useForm(validationInputsIds, false);
   const authContent = type === "login" ? "Login" : "signup" ? "Signup" : "";
   const handleAuthSubmit = async (event) => {
     event.preventDefault();
+    console.log("inputs", formState.inputs);
     if (type === "login") {
       try {
         const responseData = await sendRequest(
@@ -71,7 +75,13 @@ const Auth = ({ type, inputs, history }) => {
               {...input}
             />
           ))}
-          {type === "signup" && <Shared_ImageUpload center id="image" />}
+          {type === "signup" && (
+            <Shared_ImageUpload
+              center
+              id="image"
+              handleFileInput={handleInputChange}
+            />
+          )}
           <Shared_Button type="submit" disabled={!formState.isValid}>
             {authContent.toUpperCase()}
           </Shared_Button>
