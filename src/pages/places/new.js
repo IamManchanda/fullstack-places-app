@@ -66,7 +66,6 @@ const P_Places_New = () => {
           />
         ))}
         <Shared_ImageUpload
-          center
           id="image"
           handleFileInput={handleInputChange}
           errorMessage="Please provide an image."
