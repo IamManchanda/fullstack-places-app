@@ -5,6 +5,7 @@ import Shared_FormInput from "../../components/shared/form-input";
 import Shared_Button from "../../components/shared/button";
 import Shared_ErrorModal from "../../components/shared/error-modal";
 import Shared_LoadingSpinner from "../../components/shared/loading-spinner";
+import Shared_ImageUpload from "../../components/shared/image-upload";
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from "../../utils/validators";
 import AuthContext from "../../context/auth";
 import { useForm } from "../../hooks/form";
@@ -35,27 +36,20 @@ const P_Places_New = () => {
     },
   ];
   const { userId } = useContext(AuthContext);
-  const validationInputsIds = inputs.map((input) => input.id);
+  const validationInputsIds = [...inputs.map((input) => input.id), "image"];
   const [formState, handleInputChange] = useForm(validationInputsIds, false);
   const [isLoading, error, sendRequest, clearError] = useHttpClient();
   const history = useHistory();
   const handlePlaceSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log(userId);
-      await sendRequest(
-        "http://localhost:5000/api/places",
-        "POST",
-        JSON.stringify({
-          title: formState.inputs.title.value,
-          description: formState.inputs.description.value,
-          address: formState.inputs.address.value,
-          creator: userId,
-        }),
-        {
-          "Content-Type": "application/json",
-        },
-      );
+      const formData = new FormData();
+      formData.append("title", formState.inputs.title.value);
+      formData.append("description", formState.inputs.description.value);
+      formData.append("address", formState.inputs.address.value);
+      formData.append("creator", userId);
+      formData.append("image", formState.inputs.image.value);
+      await sendRequest("http://localhost:5000/api/places", "POST", formData);
       history.push("/");
     } catch (error) {}
   };
@@ -71,6 +65,12 @@ const P_Places_New = () => {
             {...input}
           />
         ))}
+        <Shared_ImageUpload
+          center
+          id="image"
+          handleFileInput={handleInputChange}
+          errorMessage="Please provide an image."
+        />
         <Shared_Button type="submit" disabled={!formState.isValid}>
           Add a Place
         </Shared_Button>

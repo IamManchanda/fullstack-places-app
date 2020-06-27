@@ -77,6 +77,7 @@ const Auth = ({ type, inputs, history }) => {
               center
               id="image"
               handleFileInput={handleInputChange}
+              errorMessage="Please provide an image."
             />
           )}
           <Shared_Button type="submit" disabled={!formState.isValid}>

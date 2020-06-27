@@ -10,7 +10,7 @@ const PlacesList = ({ places, handleDelete }) => {
       <div className="places-list center h-full">
         <Shared_Card>
           <h2>No Places found. Maybe Create One?</h2>
-          <Shared_Button to="/places/new">Share Place</Shared_Button>
+          <Shared_Button to="/places/new">Create Place</Shared_Button>
         </Shared_Card>
       </div>
     );
