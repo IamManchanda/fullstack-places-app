@@ -35,7 +35,7 @@ const P_Places_New = () => {
       errorMessage: "Please enter a valid address.",
     },
   ];
-  const { userId } = useContext(AuthContext);
+  const { userId, token } = useContext(AuthContext);
   const validationInputsIds = [...inputs.map((input) => input.id), "image"];
   const [formState, handleInputChange] = useForm(validationInputsIds, false);
   const [isLoading, error, sendRequest, clearError] = useHttpClient();
@@ -49,7 +49,9 @@ const P_Places_New = () => {
       formData.append("address", formState.inputs.address.value);
       formData.append("creator", userId);
       formData.append("image", formState.inputs.image.value);
-      await sendRequest("http://localhost:5000/api/places", "POST", formData);
+      await sendRequest("http://localhost:5000/api/places", "POST", formData, {
+        Authorization: `Bearer ${token}`,
+      });
       history.push("/");
     } catch (error) {}
   };
