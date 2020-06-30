@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-pascal-case */
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -20,6 +20,7 @@ import "./assets/styles.css";
 const App = () => {
   const [token, setToken] = useState(null);
   const [userId, setUserId] = useState(false);
+
   const login = useCallback((uid, token) => {
     setToken(token);
     setUserId(uid);
@@ -28,7 +29,15 @@ const App = () => {
   const logout = useCallback(() => {
     setToken(null);
     setUserId(null);
+    localStorage.removeItem("userData");
   }, []);
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("userData"));
+    if (storedData && storedData.token) {
+      login(storedData.userId, storedData.token);
+    }
+  }, [login]);
 
   return (
     <AuthProvider
