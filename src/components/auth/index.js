@@ -52,7 +52,7 @@ const Auth = ({ type, inputs, history }) => {
           "POST",
           formData,
         );
-        login(responseData.userId, responseData.token);
+        login(responseData.user, responseData.token);
         history.push("/");
       } catch (error) {}
     }
