@@ -19,7 +19,7 @@ const PlacesList_PlaceItem = ({
   location,
   handleDelete,
 }) => {
-  const { userId, isLoggedIn } = useContext(AuthContext);
+  const { userId, isLoggedIn, token } = useContext(AuthContext);
   const [isLoading, error, sendRequest, clearError] = useHttpClient();
   const [showMap, setShowMap] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -30,7 +30,12 @@ const PlacesList_PlaceItem = ({
   const handleDeleteConfirmation = async () => {
     setShowConfirm(false);
     try {
-      await sendRequest(`http://localhost:5000/api/places/${id}`, "DELETE");
+      await sendRequest(
+        `http://localhost:5000/api/places/${id}`,
+        "DELETE",
+        null,
+        { Authorization: `Bearer ${token}` },
+      );
       handleDelete(id);
     } catch (error) {}
   };

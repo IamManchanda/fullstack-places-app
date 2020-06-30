@@ -31,7 +31,7 @@ const P_Places_PlaceId_Edit = () => {
       errorMessage: "Please enter a valid description (atleast 5 characters).",
     },
   ];
-  const { userId } = useContext(AuthContext);
+  const { userId, token } = useContext(AuthContext);
   const [isLoading, error, sendRequest, clearError] = useHttpClient();
   const [loadedPlace, setLoadedPlace] = useState();
   const validationInputsIds = inputs.map((input) => input.id);
@@ -76,6 +76,7 @@ const P_Places_PlaceId_Edit = () => {
         }),
         {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       );
       history.push(`/users/${userId}/places`);
