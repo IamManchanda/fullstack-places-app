@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-pascal-case */
-import React, { useState, useCallback } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -15,26 +15,19 @@ import P_Places_PlaceId_Edit from "./pages/places/_place_id/edit";
 import P_Places_New from "./pages/places/new";
 import P_Error from "./pages/error";
 import { AuthProvider } from "./context/auth";
+import { useAuth } from "./hooks/auth";
 import "./assets/styles.css";
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userId, setUserId] = useState(false);
-  const login = useCallback((uid) => {
-    setIsLoggedIn(true);
-    setUserId(uid);
-  }, []);
-  const logout = useCallback(() => {
-    setIsLoggedIn(false);
-    setUserId(null);
-  }, []);
-
+  const [token, login, logout, userId] = useAuth();
   return (
-    <AuthProvider value={{ isLoggedIn, userId, login, logout }}>
+    <AuthProvider
+      value={{ isLoggedIn: Boolean(token), token, userId, login, logout }}
+    >
       <Router>
         <Navigation_MainNavigation />
         <main>
-          {isLoggedIn ? (
+          {token ? (
             <Switch>
               <Route path="/" exact>
                 <P_Index />

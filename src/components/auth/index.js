@@ -36,7 +36,7 @@ const Auth = ({ type, inputs, history }) => {
             "Content-Type": "application/json",
           },
         );
-        login(responseData.user.id);
+        login(responseData.userId, responseData.token);
         history.push("/");
       } catch (error) {}
     }
@@ -52,7 +52,7 @@ const Auth = ({ type, inputs, history }) => {
           "POST",
           formData,
         );
-        login(responseData.user.id);
+        login(responseData.user, responseData.token);
         history.push("/");
       } catch (error) {}
     }
