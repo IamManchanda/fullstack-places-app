@@ -31,7 +31,7 @@ const PlacesList_PlaceItem = ({
     setShowConfirm(false);
     try {
       await sendRequest(
-        `http://localhost:5000/api/places/${id}`,
+        `${process.env.REACT_APP_API_SERVER_ENDPOINT}/places/${id}`,
         "DELETE",
         null,
         { Authorization: `Bearer ${token}` },
@@ -82,7 +82,7 @@ const PlacesList_PlaceItem = ({
         <Shared_Card className="place-item__content">
           <div className="place-item__image">
             <img
-              src={`http://localhost:5000/${image}`}
+              src={`${process.env.REACT_APP_STATIC_SERVER_ENDPOINT}/${image}`}
               alt={title}
               title={title}
             />

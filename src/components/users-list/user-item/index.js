@@ -9,7 +9,10 @@ const UsersList_UserItem = ({ id, name, image, places }) => (
     <Shared_Card className="user-item__content">
       <Link to={`/users/${id}/places`}>
         <div className="user-item__image">
-          <Shared_Avatar name={name} image={`http://localhost:5000/${image}`} />
+          <Shared_Avatar
+            name={name}
+            image={`${process.env.REACT_APP_STATIC_SERVER_ENDPOINT}/${image}`}
+          />
         </div>
         <div className="user-item__info">
           <h2>{name}</h2>

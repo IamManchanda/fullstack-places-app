@@ -48,9 +48,14 @@ const P_Places_New = () => {
       formData.append("description", formState.inputs.description.value);
       formData.append("address", formState.inputs.address.value);
       formData.append("image", formState.inputs.image.value);
-      await sendRequest("http://localhost:5000/api/places", "POST", formData, {
-        Authorization: `Bearer ${token}`,
-      });
+      await sendRequest(
+        `${process.env.REACT_APP_API_SERVER_ENDPOINT}/places`,
+        "POST",
+        formData,
+        {
+          Authorization: `Bearer ${token}`,
+        },
+      );
       history.push("/");
     } catch (error) {}
   };

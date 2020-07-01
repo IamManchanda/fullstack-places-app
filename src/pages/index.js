@@ -13,7 +13,7 @@ const P_Index = () => {
       (async function fetchUsers() {
         try {
           const responseData = await sendRequest(
-            "http://localhost:5000/api/users",
+            `${process.env.REACT_APP_API_SERVER_ENDPOINT}/users`,
           );
           setLoadedUsers(responseData.users);
         } catch (error) {}

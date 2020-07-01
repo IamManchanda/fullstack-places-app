@@ -45,7 +45,7 @@ const P_Places_PlaceId_Edit = () => {
     (async function fetchPlace() {
       try {
         const responseData = await sendRequest(
-          `http://localhost:5000/api/places/${placeId}`,
+          `${process.env.REACT_APP_API_SERVER_ENDPOINT}/places/${placeId}`,
         );
         setLoadedPlace(responseData.place);
         setFormData(
@@ -68,7 +68,7 @@ const P_Places_PlaceId_Edit = () => {
     event.preventDefault();
     try {
       await sendRequest(
-        `http://localhost:5000/api/places/${placeId}`,
+        `${process.env.REACT_APP_API_SERVER_ENDPOINT}/places/${placeId}`,
         "PATCH",
         JSON.stringify({
           title: formState.inputs.title.value,

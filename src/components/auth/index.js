@@ -26,7 +26,7 @@ const Auth = ({ type, inputs, history }) => {
     if (type === "login") {
       try {
         const responseData = await sendRequest(
-          "http://localhost:5000/api/users/login",
+          `${process.env.REACT_APP_API_SERVER_ENDPOINT}/users/login`,
           "POST",
           JSON.stringify({
             email: formState.inputs.email.value,
@@ -48,7 +48,7 @@ const Auth = ({ type, inputs, history }) => {
         formData.append("password", formState.inputs.password.value);
         formData.append("image", formState.inputs.image.value);
         const responseData = await sendRequest(
-          "http://localhost:5000/api/users/signup",
+          `${process.env.REACT_APP_API_SERVER_ENDPOINT}/users/signup`,
           "POST",
           formData,
         );
