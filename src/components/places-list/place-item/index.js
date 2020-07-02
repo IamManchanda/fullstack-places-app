@@ -81,11 +81,7 @@ const PlacesList_PlaceItem = ({
         {isLoading && <Shared_LoadingSpinner asOverlay />}
         <Shared_Card className="place-item__content">
           <div className="place-item__image">
-            <img
-              src={`${process.env.REACT_APP_STATIC_SERVER_ENDPOINT}/${image}`}
-              alt={title}
-              title={title}
-            />
+            <img src={image} alt={title} title={title} />
           </div>
           <div className="place-item__info">
             <h2>{title}</h2>
